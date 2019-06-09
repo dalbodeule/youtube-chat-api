@@ -76,6 +76,9 @@ class YoutubeLiveChat extends events_1.EventEmitter {
                 const data = response.data;
                 if (data.kind === 'youtube#liveChatMessageListResponse') {
                     data.items.forEach((value, index, array) => {
+                        if (value.snippet.type === 'chatEndedEvent') {
+                            this.stop();
+                        }
                         this.emit('message', value);
                     });
                 }

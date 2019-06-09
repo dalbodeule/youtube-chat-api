@@ -3,6 +3,7 @@ import { EventEmitter } from 'events'
 
 interface YoutubeLiveChat extends EventEmitter {
   on(event: 'message', listener: (value: ILiveChatMessage) => void): this
+  on(event: 'stop', listener: () => void): this
 }
 
 class YoutubeLiveChat extends EventEmitter {
@@ -34,6 +35,8 @@ class YoutubeLiveChat extends EventEmitter {
   public stop() {
     if (this.loop) {
       clearInterval(this.loop)
+
+      this.emit('stop')
     }
   }
 
@@ -82,7 +85,11 @@ class YoutubeLiveChat extends EventEmitter {
 
       if (data.kind === 'youtube#liveChatMessageListResponse') {
         (data as IYoutubeLiveChatResponse).items.forEach((value, index, array) => {
-          this.emit('message', value)
+          if (value.snippet.type === 'chatEndedEvent') {
+            this.stop()
+          } else {
+            this.emit('message', value)
+          }
         })
       }
     } catch (error) {

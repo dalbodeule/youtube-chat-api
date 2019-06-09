@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 interface YoutubeLiveChat extends EventEmitter {
     on(event: 'message', listener: (value: ILiveChatMessage) => void): this;
+    on(event: 'stop', listener: () => void): this;
 }
 declare class YoutubeLiveChat extends EventEmitter {
     private liveChatId;

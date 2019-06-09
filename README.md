@@ -19,6 +19,10 @@ YoutubeChat.on('message', (value) => {
     }
 })
 
+YoutubeChat.on('stop', () => {
+    console.log('youtube live chat read stopped')
+})
+
 YoutubeChat.send('Hello!')
 ```
 
